@@ -8,16 +8,8 @@ from airflow.operators.bash import BashOperator
 # def scrape_apartments():
 
 
-def scrape_houses():
-    print("I scrape houses !")
-
-
 def store_data(data):
     print(f"{data} data saved in the database !")
-
-
-def scrape_apartments():
-    print("I scrape apartments !")
 
 
 def analysis_preprocessing():
@@ -63,15 +55,18 @@ dag = DAG(
 # ---------------------------------------
 
 # ------ 3 : Definition of the operators ------
+# The folder inside which your project pipeline's scripts are stored (absolute path)
+file_path = "/mnt/d/airflow/scripts/scraper"
+
 scrape_apartments = BashOperator(
     task_id="scrape_apartments",
-    bash_command="python3 /mnt/c/Documents\ and\ Settings/HP/Documents/Bootcamp/Projects/Team/Immo-eliza_scraper/main_apartments.py",
+    bash_command=f"python3 {file_path}/main_apartments.py",
     dag=dag,
 )
 
 scrape_houses = BashOperator(
     task_id="scrape_houses",
-    bash_command="python3 /mnt/c/Documents\ and\ Settings/HP/Documents/Bootcamp/Projects/Team/Immo-eliza_scraper/main_houses.py",
+    bash_command=f"python3 {file_path}/main_houses.py",
     dag=dag,
 )
 
