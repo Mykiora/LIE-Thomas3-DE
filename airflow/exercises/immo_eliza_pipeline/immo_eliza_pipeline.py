@@ -1,27 +1,11 @@
-from datetime import datetime
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-
-default_args = {
-    "owner": "airflow",
-    "start_date": datetime(2023, 23, 11),
-}
-
-immo_eliza_pipeline = DAG(
-    dag_id="immo_eliza_pipeline",
-    default_args=default_args,
-    schedule_interval="@daily",
-    catchup=False,
-)
-
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
+from airflow.operators.bash import BashOperator
 
 
 # ------ 1 : Definition of all the required functions ------
-def scrape_apartments():
-    print("I scrape apartments !")
+# def scrape_apartments():
 
 
 def scrape_houses():
@@ -79,17 +63,15 @@ dag = DAG(
 # ---------------------------------------
 
 # ------ 3 : Definition of the operators ------
-scrape_apartments = PythonOperator(
+scrape_apartments = BashOperator(
     task_id="scrape_apartments",
-    provide_context=True,
-    python_callable=scrape_apartments,
+    bash_command="python3 /mnt/c/Documents\ and\ Settings/HP/Documents/Bootcamp/Projects/Team/Immo-eliza_scraper/main_apartments.py",
     dag=dag,
 )
 
-scrape_houses = PythonOperator(
+scrape_houses = BashOperator(
     task_id="scrape_houses",
-    provide_context=True,
-    python_callable=scrape_houses,
+    bash_command="python3 /mnt/c/Documents\ and\ Settings/HP/Documents/Bootcamp/Projects/Team/Immo-eliza_scraper/main_houses.py",
     dag=dag,
 )
 
